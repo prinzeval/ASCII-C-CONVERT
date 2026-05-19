@@ -1,0 +1,10 @@
+# Compiled Binaries
+home
+home.exe
+*.out
+*.o
+*.obj
+
+# OS Metadata
+.DS_Store
+Thumbs.db
