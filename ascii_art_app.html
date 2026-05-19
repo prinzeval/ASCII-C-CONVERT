@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina - Advanced ASCII Art Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #080B11;
+            --bg-secondary: rgba(17, 22, 37, 0.7);
+            --accent-primary: #6366F1;
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            --accent-success: #10B981;
+            --accent-success-glow: rgba(16, 185, 129, 0.3);
+            --text-main: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --card-radius: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 40%);
+        }
+
+        /* Premium Header Styling */
+        header {
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(8, 11, 17, 0.6);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-primary), #A855F7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px var(--accent-glow);
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #FFF;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFF 30%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Layout Configuration */
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 2rem;
+            padding: 2rem 4rem;
+            max-width: 1800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Control Panel Styles */
+        .control-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+            backdrop-filter: blur(16px);
+            height: fit-content;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #FFF;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid var(--accent-primary);
+            padding-left: 10px;
+        }
+
+        /* File Upload Zone */
+        .dropzone {
+            border: 2px dashed rgba(99, 102, 241, 0.3);
+            border-radius: 14px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.01);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dropzone:hover, .dropzone.dragover {
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.04);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+        }
+
+        .dropzone svg {
+            width: 48px;
+            height: 48px;
+            stroke: var(--accent-primary);
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .dropzone:hover svg {
+            transform: translateY(-5px);
+        }
+
+        .dropzone p {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .dropzone span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* Control Inputs */
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .range-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--accent-glow);
+            transition: transform 0.1s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .range-val {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 36px;
+            text-align: right;
+            color: var(--accent-primary);
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input[type="text"]:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px var(--accent-glow);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Toggle Button styling */
+        .toggle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-primary);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Output Canvas and Viewport */
+        .output-viewport {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(16px);
+            min-height: 500px;
+            position: relative;
+        }
+
+        .viewport-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .viewport-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #EF4444;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .status-dot.active {
+            background-color: var(--accent-success);
+            box-shadow: 0 0 10px var(--accent-success-glow);
+        }
+
+        .viewport-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* ASCII Container styling */
+        .ascii-container-wrapper {
+            flex: 1;
+            width: 100%;
+            overflow: auto;
+            background: #04060A;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 1.5rem;
+            min-height: 400px;
+        }
+
+        .ascii-art {
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            line-height: 1.0;
+            white-space: pre;
+            text-align: center;
+            user-select: all;
+            margin: auto;
+        }
+
+        .ascii-art.colored {
+            font-weight: bold;
+        }
+
+        .placeholder-state {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .placeholder-state svg {
+            width: 64px;
+            height: 64px;
+            stroke: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">L</div>
+            <div>
+                <h1>Lumina</h1>
+                <div class="subtitle">Image to ASCII Engine</div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Sidebar Controls -->
+        <div class="control-panel">
+            <div class="section-title">Source Image</div>
+            
+            <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375 0 11-.75 0 .375 0 01.75 0z" />
+                </svg>
+                <p>Drag & drop image</p>
+                <span>or click to browse local files</span>
+                <input type="file" id="fileInput" accept="image/*">
+            </div>
+
+            <div class="section-title">Resolution & Grid</div>
+
+            <div class="control-group">
+                <label>Grid Width (chars)</label>
+                <div class="range-wrapper">
+                    <input type="range" id="gridWidth" min="20" max="250" value="100">
+                    <span class="range-val" id="widthVal">100</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Grid Height (chars)</label>
+                <div class="range-wrapper">
+                    <input type="range" id="gridHeight" min="20" max="200" value="50">
+                    <span class="range-val" id="heightVal">50</span>
+                </div>
+            </div>
+
+            <div class="toggle-container">
+                <label>Aspect Ratio Lock (2:1)</label>
+                <label class="switch">
+                    <input type="checkbox" id="aspectLock" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="section-title">Styling & Palettes</div>
+
+            <div class="control-group">
+                <label>Character Palette</label>
+                <select id="paletteSelect">
+                    <option value="standard">Standard: @%#*+=-:. </option>
+                    <option value="detailed">Detailed/Dense (64 chars)</option>
+                    <option value="blocks">Blocks: █▓▒░ </option>
+                    <option value="binary">Binary: 10 </option>
+                    <option value="custom">Custom Palette</option>
+                </select>
+            </div>
+
+            <div class="control-group" id="customPaletteGroup" style="display: none;">
+                <label>Custom Palette (Dark to Light)</label>
+                <input type="text" id="customPaletteInput" value="@#*+-:. ">
+            </div>
+
+            <div class="toggle-container">
+                <label>Render in Full Color</label>
+                <label class="switch">
+                    <input type="checkbox" id="colorToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle-container">
+                <label>Invert Brightness</label>
+                <label class="switch">
+                    <input type="checkbox" id="invertToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- ASCII Preview Area -->
+        <div class="output-viewport">
+            <div class="viewport-header">
+                <div class="viewport-title">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span style="font-weight: 600; color: #FFF;" id="statusText">No Image Loaded</span>
+                </div>
+                <div class="viewport-actions">
+                    <button class="btn" id="btnCopy" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px;height:16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-3a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.375c0-.621.504-1.125 1.125-1.125h9.75c.621 0 1.125.504 1.125 1.125v10.5c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.375z" />
+                        </svg>
+                        Copy ASCII
+                    </button>
+                    <button class="btn btn-success" id="btnDownload" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px;height:16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        Download Art
+                    </button>
+                </div>
+            </div>
+
+            <div class="ascii-container-wrapper">
+                <div class="placeholder-state" id="placeholder">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 012.008 1.24l.885 1.77a2.25 2.25 0 002.007 1.24h1.98a2.25 2.25 0 002.007-1.24l.885-1.77a2.25 2.25 0 012.007-1.24h3.86m-18 0h18a2.25 2.25 0 012.25 2.25v4.5A2.25 2.25 0 0118 21H6a2.25 2.25 0 01-2.25-2.25v-4.5a2.25 2.25 0 012.25-2.25zM6.75 6.75h.75v.75h-.75v-.75zm3 0h.75v.75h-.75v-.75zm3 0h.75v.75h-.75v-.75z" />
+                    </svg>
+                    <p style="font-weight: 600; color: #FFF;">Drop your image or select one to begin</p>
+                    <p style="font-size: 0.85rem; max-width: 250px;">Supported formats include JPG, PNG, WebP, GIF, and SVG.</p>
+                </div>
+                <div class="ascii-art" id="asciiOutput"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        Lumina Engine &copy; 2026. Premium Creative Coding Sandbox.
+    </footer>
+
+    <script>
+        // Core State
+        let loadedImage = null;
+        const PALETTES = {
+            standard: "@%#*+=-:. ",
+            detailed: "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ",
+            blocks: "█▓▒░ ",
+            binary: "10 "
+        };
+
+        // DOM elements
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const gridWidth = document.getElementById('gridWidth');
+        const gridHeight = document.getElementById('gridHeight');
+        const widthVal = document.getElementById('widthVal');
+        const heightVal = document.getElementById('heightVal');
+        const aspectLock = document.getElementById('aspectLock');
+        const paletteSelect = document.getElementById('paletteSelect');
+        const customPaletteGroup = document.getElementById('customPaletteGroup');
+        const customPaletteInput = document.getElementById('customPaletteInput');
+        const colorToggle = document.getElementById('colorToggle');
+        const invertToggle = document.getElementById('invertToggle');
+        
+        const asciiOutput = document.getElementById('asciiOutput');
+        const placeholder = document.getElementById('placeholder');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const btnCopy = document.getElementById('btnCopy');
+        const btnDownload = document.getElementById('btnDownload');
+
+        // Drag & Drop event listeners
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('dragover');
+            }, false);
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length) handleFile(files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFile(e.target.files[0]);
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    loadedImage = img;
+                    statusDot.classList.add('active');
+                    statusText.textContent = `${file.name} (${img.width}x${img.height})`;
+                    placeholder.style.display = 'none';
+                    btnCopy.disabled = false;
+                    btnDownload.disabled = false;
+                    
+                    // Autofit height based on image aspect ratio when locking is enabled
+                    adjustDimensions(true);
+                    processImage();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Handle Dimension aspect-ratio sync
+        function adjustDimensions(isWidthSource) {
+            if (!loadedImage || !aspectLock.checked) return;
+            
+            const originalAspect = loadedImage.width / loadedImage.height;
+            // 2:1 adjustment for console monospace character dimensions (height is ~2x width)
+            const characterAspect = 2.0; 
+            const combinedAspect = originalAspect * characterAspect;
+
+            if (isWidthSource) {
+                const calculatedHeight = Math.round(gridWidth.value / combinedAspect);
+                gridHeight.value = Math.max(gridHeight.min, Math.min(gridHeight.max, calculatedHeight));
+                heightVal.textContent = gridHeight.value;
+            } else {
+                const calculatedWidth = Math.round(gridHeight.value * combinedAspect);
+                gridWidth.value = Math.max(gridWidth.min, Math.min(gridWidth.max, calculatedWidth));
+                widthVal.textContent = gridWidth.value;
+            }
+        }
+
+        // Live slider updates
+        gridWidth.addEventListener('input', (e) => {
+            widthVal.textContent = e.target.value;
+            adjustDimensions(true);
+            processImage();
+        });
+
+        gridHeight.addEventListener('input', (e) => {
+            heightVal.textContent = e.target.value;
+            adjustDimensions(false);
+            processImage();
+        });
+
+        aspectLock.addEventListener('change', () => {
+            adjustDimensions(true);
+            processImage();
+        });
+
+        paletteSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'custom') {
+                customPaletteGroup.style.display = 'flex';
+            } else {
+                customPaletteGroup.style.display = 'none';
+            }
+            processImage();
+        });
+
+        customPaletteInput.addEventListener('input', processImage);
+        colorToggle.addEventListener('change', processImage);
+        invertToggle.addEventListener('change', processImage);
+
+        // Core Image to ASCII processing
+        function processImage() {
+            if (!loadedImage) return;
+
+            const w = parseInt(gridWidth.value);
+            const h = parseInt(gridHeight.value);
+
+            // Set up offscreen canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            
+            // Render downscaled image
+            ctx.drawImage(loadedImage, 0, 0, w, h);
+            const imgData = ctx.getImageData(0, 0, w, h);
+            const pixels = imgData.data;
+
+            // Get selected palette
+            let paletteStr = PALETTES[paletteSelect.value] || customPaletteInput.value;
+            if (!paletteStr.length) paletteStr = " ";
+            
+            if (invertToggle.checked) {
+                paletteStr = paletteStr.split("").reverse().join("");
+            }
+
+            const showColor = colorToggle.checked;
+            let outputHTML = "";
+            let outputText = "";
+
+            if (showColor) {
+                asciiOutput.classList.add('colored');
+            } else {
+                asciiOutput.classList.remove('colored');
+            }
+
+            for (let y = 0; y < h; ++y) {
+                for (let x = 0; x < w; ++x) {
+                    const idx = (y * w + x) * 4;
+                    const r = pixels[idx];
+                    const g = pixels[idx + 1];
+                    const b = pixels[idx + 2];
+                    const a = pixels[idx + 3];
+
+                    if (a < 20) { // Support transparent background files
+                        outputHTML += " ";
+                        outputText += " ";
+                        continue;
+                    }
+
+                    // Rec. 601 grayscale value
+                    const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+                    const charIdx = Math.floor(brightness * (paletteStr.length - 1) / 255);
+                    const char = paletteStr[charIdx] === " " ? "&nbsp;" : paletteStr[charIdx];
+                    const plainChar = paletteStr[charIdx];
+
+                    if (showColor) {
+                        outputHTML += `<span style="color: rgb(${r},${g},${b});">${char}</span>`;
+                    } else {
+                        outputHTML += char;
+                    }
+                    outputText += plainChar;
+                }
+                outputHTML += "\n";
+                outputText += "\n";
+            }
+
+            asciiOutput.innerHTML = outputHTML;
+            asciiOutput.dataset.plainText = outputText;
+        }
+
+        // Copy functionality
+        btnCopy.addEventListener('click', () => {
+            if (!loadedImage) return;
+            const textToCopy = asciiOutput.dataset.plainText || asciiOutput.textContent;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const oldText = btnCopy.innerHTML;
+                btnCopy.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:16px;height:16px; stroke: var(--accent-success);">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                    Copied!`;
+                btnCopy.style.borderColor = "var(--accent-success)";
+                setTimeout(() => {
+                    btnCopy.innerHTML = oldText;
+                    btnCopy.style.borderColor = "";
+                }, 2000);
+            });
+        });
+
+        // Download functionality
+        btnDownload.addEventListener('click', () => {
+            if (!loadedImage) return;
+            const text = asciiOutput.dataset.plainText || asciiOutput.textContent;
+            const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ascii-art.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>
