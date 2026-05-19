@@ -3,8 +3,18 @@
 An advanced, premium-grade **Digital Image to ASCII Art Generator** developed as a university programming assignment. This project serves as an academic showcase of C++ image processing, dynamic downsampling, Rec. 601 grayscale intensity mapping, and standard graphics interfaces.
 
 This suite features two distinct, production-ready interfaces:
-1. **Universal C++ CLI Tool**: Headless, highly-optimized command-line application backed by `stb_image.h` to natively support JPEG, PNG, BMP, GIF, and PSD without complex compiled dependencies.
+1. **Universal C++ CLI Tool**: Headless, highly-optimized C++ application backed by `stb_image.h` to natively support JPEG, PNG, BMP, GIF, and PSD without external compiled dependencies.
 2. **Interactive HTML5 Web Dashboard (Lumina)**: A beautiful single-page creative interface utilizing HTML5 Canvas for real-time slider-based image scaling, contrast adjustment, and dynamic inline color styling.
+
+---
+
+## 🖼️ Before & After Showcase
+
+Below is a live rendering comparison showcasing how the generator handles digital image inputs:
+
+| Original Image (`before.png`) | Generated ASCII Art Output |
+|:---:|:---:|
+| <img src="before.png" width="280" alt="Original Heart Image"> | <pre>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@%%%%%%@@@@@@@@%%%%%%@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@%#########%%@@%%#########%@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@%############%%############%@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@%############################%@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@%############################%@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@%############################%@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@%##########################%@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@%########################%@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@%####################%@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@%################%@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@%############%@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@%########%@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@%####%@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</pre> |
 
 ---
 
@@ -27,7 +37,7 @@ This suite features two distinct, production-ready interfaces:
 ### 🎨 2. Lumina Web Dashboard (`ascii_art_app.html`)
 * **Glassmorphic Theme**: Designed with an ultra-modern dark mode layout using sleek glowing gradients and responsive canvas rendering.
 * **Aspect Ratio Compensation**: Built-in automatic aspect locking to correct the classic $2:1$ vertical stretch of monospace character fonts.
-* **Full-Color Styling Mode**: Embeds custom inline inline-colors (`rgb(R, G, B)`) for each character to match original source colors.
+* **Full-Color Styling Mode**: Embeds custom inline-colors (`rgb(R, G, B)`) for each character to match original source colors.
 * **Multi-Palette Library**: Supports blocks, binary characters, standard densities, and custom character palette overrides.
 
 ---
