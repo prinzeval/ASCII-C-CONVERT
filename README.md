@@ -3,7 +3,7 @@
 An advanced, premium-grade **Digital Image to ASCII Art Generator** developed as a university programming assignment. This project serves as an academic showcase of C++ image processing, dynamic downsampling, Rec. 601 grayscale intensity mapping, and standard graphics interfaces.
 
 This suite features two distinct, production-ready interfaces:
-1. **Universal C++ CLI Tool**: Headless, highly-optimized C++ application backed by `stb_image.h` to natively support JPEG, PNG, BMP, GIF, and PSD without external compiled dependencies.
+1. **Universal C++ CLI Tool**: Headless, highly-optimized C++ application utilizing a custom, lightweight PPM reader built entirely from scratch in C++ within a single file without any external dependencies.
 2. **Interactive HTML5 Web Dashboard (Lumina)**: A beautiful single-page creative interface utilizing HTML5 Canvas for real-time slider-based image scaling, contrast adjustment, and dynamic inline color styling.
 
 ---
@@ -28,7 +28,7 @@ Below is a live rendering comparison showcasing how the generator handles digita
 ## 🚀 Key Features
 
 ### 💻 1. C++ CLI Application
-* **Universal Format Ingestion**: Uses a lightweight single-header `stb_image` wrapper to process almost any commercial image file (`.png`, `.jpg`, `.bmp`, `.gif`, etc.).
+* **From-Scratch Image Ingestion**: Uses a custom, lightweight PPM reader built directly into `home.cpp` to process standard binary Portable Pixmap (`.ppm`, P6) format images entirely from scratch without using any external or third-party libraries.
 * **Pixel Density Rescaling**: Automatically maps and downsamples regional pixel blocks to fit character grid boundaries of typical monospace terminal screens.
 * **Rec. 601 Grayscale Translation**: Uses standard human-eye perception luminance weighting to map color channels to individual brightness values:
   $$\text{Luminance} = 0.299R + 0.587G + 0.114B$$
