@@ -3,7 +3,7 @@
 An advanced, premium-grade **Digital Image to ASCII Art Generator** developed as a university programming assignment. This project serves as an academic showcase of C++ image processing, dynamic downsampling, Rec. 601 grayscale intensity mapping, and standard graphics interfaces.
 
 This suite features two distinct, production-ready interfaces:
-1. **Universal C++ CLI Tool**: Headless, highly-optimized C++ application utilizing a custom, lightweight PPM reader built entirely from scratch in C++ within a single file without any external dependencies.
+1. **Universal C++ CLI Tool**: Headless, highly-optimized C++ application utilizing the course-supplied `image.h` simple library backed by `libpng` to natively process PNG images.
 2. **Interactive HTML5 Web Dashboard (Lumina)**: A beautiful single-page creative interface utilizing HTML5 Canvas for real-time slider-based image scaling, contrast adjustment, and dynamic inline color styling.
 
 ---
@@ -28,7 +28,7 @@ Below is a live rendering comparison showcasing how the generator handles digita
 ## 🚀 Key Features
 
 ### 💻 1. C++ CLI Application
-* **From-Scratch Image Ingestion**: Uses a custom, lightweight PPM reader built directly into `home.cpp` to process standard binary Portable Pixmap (`.ppm`, P6) format images entirely from scratch without using any external or third-party libraries.
+* **Course-Compliant Ingestion**: Uses the official course-supplied C++ `image.h` simple library to read and process PNG format images.
 * **Pixel Density Rescaling**: Automatically maps and downsamples regional pixel blocks to fit character grid boundaries of typical monospace terminal screens.
 * **Rec. 601 Grayscale Translation**: Uses standard human-eye perception luminance weighting to map color channels to individual brightness values:
   $$\text{Luminance} = 0.299R + 0.587G + 0.114B$$
@@ -57,7 +57,7 @@ g++ -std=c++11 home.cpp -o home
 Execute the binary by passing your target image followed by custom character grid dimensions:
 ```bash
 # Usage: ./home <image_path> [char_width] [char_height]
-./home test.ppm 80 40
+./home real_before.png 80 40
 ```
 
 ### 🌐 Launching the Web App
